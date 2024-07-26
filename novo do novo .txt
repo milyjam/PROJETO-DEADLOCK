@@ -1,0 +1,97 @@
+novo do novo 
+
+
+#include <Servo.h>
+
+#define pinBuzzer 13
+#define pinPIR 7
+#define SERVO 8 // Porta Digital 8 PWM
+#define pinLed 9
+
+Servo s; // Variável tipo Servo
+int pos; // Posição Servo
+
+
+void setup() {
+  s.attach(SERVO);
+  s.write(0); // Inicia o motor na posição zero
+  pinMode(pinPIR, INPUT); //DEFINE O PINO COMO ENTRADA
+  pinMode(pinBuzzer, OUTPUT);
+  pinMode(pinLed, OUTPUT);
+  
+  Serial.begin(9600);//INICIALIZA A SERIAL
+
+}
+
+void loop() {
+  bool valorPIR = digitalRead(pinPIR);
+  bool tipoBuzzer = 0;
+
+  if (valorPIR) {
+    Serial.println("DETECTADO");
+    digitalWrite(pinBuzzer, 50);
+    digitalWrite(pinLed, HIGH);
+    s.write(75);
+    delay(15);
+  } else {
+     Serial.println("NÃO DETECTADO");
+     digitalWrite(pinBuzzer, LOW);
+     digitalWrite(pinLed, LOW);
+     for (pos = 70; pos >= 0; pos--)
+    {
+      s.write(0);
+      delay(1000); 
+    }
+  }
+     delay(1000); 
+}
+
+
+
+
+#include <Servo.h>
+
+#define pinBuzzer 13
+#define pinPIR 7
+#define SERVO 8 // Porta Digital 8 PWM
+#define pinLed 9
+
+Servo s; // Variável tipo Servo
+int pos; // Posição Servo
+int val = 0;
+bool movimento = false;
+
+void setup() {
+  s.attach(SERVO);
+  s.write(0); // Inicia o motor na posição zero
+  pinMode(pinPIR, INPUT); //DEFINE O PINO COMO ENTRADA
+  pinMode(pinBuzzer, OUTPUT);
+  pinMode(pinLed, OUTPUT);
+  
+  Serial.begin(9600);//INICIALIZA A SERIAL
+
+}
+
+void loop() {
+  bool valorPIR = digitalRead(pinPIR);
+  
+  bool tipoBuzzer = 0;
+
+  if (valorPIR == HIGH) {
+    Serial.println("DETECTADO");
+    digitalWrite(pinBuzzer, 50);
+    digitalWrite(pinLed, HIGH);
+    s.write(75);
+    delay(15);
+  } else {
+     Serial.println("NÃO DETECTADO");
+     digitalWrite(pinBuzzer, LOW);
+     digitalWrite(pinLed, LOW);
+     for (pos = 70; pos >= 0; pos--)
+    {
+      s.write(0);
+      delay(1000); 
+    }
+  }
+     delay(1000); 
+}

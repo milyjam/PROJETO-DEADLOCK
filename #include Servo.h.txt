@@ -1,0 +1,43 @@
+#include <Servo.h>
+#include <Brasilino.h>
+
+Servo meuservo;
+int pos = 0;
+int time = 0;
+
+void setup() {
+
+  Serial.begin(9600);
+  pinMode (4, OUTPUT);
+  pinMode (10, OUTPUT);
+  pinMode (6, INPUT_PULLUP);
+  meuservo.attach(9);
+
+}
+
+void loop() {
+  int valorRecebido = analogRead(A0);
+
+  if(valorRecebido > 0){
+    for(pos = 0; pos<= 180; pos +=1){
+      meuservo.write(pos);
+      delay(15);
+  } for (pos = 180; pos>=0; pos -=1){
+      meuservo.write(pos);
+      delay(15);
+  }
+  
+    while(time <= 5000){
+    digitalWrite(4, HIGH);
+    tone(2,1000);
+    delay (500);
+    digitalWrite(4, LOW);
+    noTone (2);
+    delay (500);
+    time += 1000;
+  }
+    time = 0;
+    digitalWrite(12, LOW);
+  }
+    Serial.println(valorRecebido);
+}

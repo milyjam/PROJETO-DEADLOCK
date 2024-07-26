@@ -1,0 +1,47 @@
+#include <Servo.h>
+
+int buzzer = 8;
+int i = 0;
+bool estadodemovimento = false; // Começamos sem nenhum movimento detectado.
+int val = 0;
+Servo myServo; // Create a servo object
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(2, INPUT); // Pino 2 como entrada
+  pinMode(13, OUTPUT); // LED - Pino 13 como saída
+  pinMode(8, OUTPUT);
+  myServo.attach(9); // Attaches the servo on pin 9
+}
+
+void loop() {
+  val = digitalRead(2); // Leia o pirPin e armazene como val:
+
+  if (val == HIGH) { // Se o movimento for detectado ( 13 = HIGH), faça o seguinte:
+
+    // Altere o estado de movimento para verdadeiro (movimento detectado):
+    if (estadodemovimento == false) {
+      Serial.println("Movimento detectado!!!!");
+      estadodemovimento = true;
+
+      digitalWrite(13, HIGH); // LIGA o LED da placa
+      tone(8, 1500); // LIGA o BUZZER da placa
+
+      myServo.write(90); // Moves the servo to 90 degrees
+      delay(2000); // Wait for the servo to reach the position
+
+      noTone(8);
+      digitalWrite(13, LOW);
+    }
+  } else { // Mas, se algum movimento não for detectado.
+    digitalWrite(13, LOW); // Ligar o LED da placa
+
+    // Altere o estado de movimento para falso (sem movimento):
+    if (estadodemovimento == true) {
+      Serial.println("Movimento Finalizado!!!");
+      estadodemovimento = false; // Use '=' instead of '==' here
+      myServo.write(0); // Moves the servo to 0 degrees
+      delay(2000); // Wait for the servo to reach the position
+    }
+  }
+}

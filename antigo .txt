@@ -1,0 +1,56 @@
+antigo 
+
+
+#include <Servo.h>
+
+Servo s; // Variável tipo Servo
+#define SERVO 9 // Porta Digital 9 PWM
+
+
+
+int buzzer = 8;
+bool estadodemovimento = false; // Começamos sem nenhum movimento detectado.
+int val = 0;
+int pinLed = 7;
+int pinPir = 2;
+
+
+
+void setup(){
+ Serial.begin(9600);
+ s.attach(SERVO);
+ pinMode(2, INPUT); // Pino 2 como entrada
+ pinMode(7, OUTPUT); // LED - Pino 13 como saída
+ pinMode(8, OUTPUT); // BUZZER
+}
+
+
+void loop() {
+  val = digitalRead(2); // Leia o pirPin e armazene como val:
+
+if (val == HIGH) //Se o movimento for detectado ( 13 = HIGH), faça o seguinte:
+ {
+
+  // Altere o estado de movimento para verdadeiro (movimento detectado):
+  if(estadodemovimento == false){
+    Serial.println("Movimento detectado!!!!");
+    estadodemovimento = true;
+
+  tone(8, 1500); // LIGA o BUZZER da placa
+  digitalWrite(7, HIGH);   // LIGA o LED da placa
+  s.write(90);
+  
+  delay(5); //Esperar 5 segundos
+ }}
+ else{//Mas, se algum movimento não for detectado.
+  if (val == LOW){
+    if (estadodemovimento == true){// Altere o estado de movimento para falso (sem movimento):
+      Serial.println("Movimento Finalizado!!!");
+      estadodemovimento == false;
+      digitalWrite(7, LOW); //Desligar o LED da placa
+      noTone(8); //Deligar BUZZER
+      s.write(0); //Desligar Servo
+    }
+  }
+ }
+}

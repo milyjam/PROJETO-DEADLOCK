@@ -1,0 +1,63 @@
+#include <Servo.h>
+#include <Brasilino.h>
+
+Servo meuservo;
+int pos = 0;
+int time = 0;
+int pinopir = 3; //Pino do sensor de presença
+int pinled = 4; //Pino do LED
+int leitura = 0; //Variável para armazenar a leitura do sensor  
+bool estadoSensor = false; //Variável para armazenar o estado do sensor
+
+void setup(){
+
+  Serial.begin(9600); //Inicializa a comunicação serial
+  pinMode (pinled, OUTPUT); //Define ledPin como saída
+  pinMode (pinopir, INPUT); //Define sensorPin como entrada
+  meuservo.attach(9); //Define servo como saída
+
+}
+
+
+void loop() {
+
+
+ leitura = digitalRead(pinopir); //Realiza a leitura do sensor de presença
+
+  if (leitura == HIGH) { //Se leitura for igual a HIGH, o movimento foi detectado
+    digitalWrite(pinled, HIGH); //Aciona o LED
+    if (estadoSensor == false) { //Compara o valor de estado do LED
+      Serial.println("Movimento detectado"); //Imprime a mensagem no monitor serial
+      estadoSensor = true; //Altera o valor de estadoSensor para HIGH
+    }
+    delay(5000); //Tempo de LED acionado
+
+  } else { //Se leitura for igual a LOW, não houve movimento detectado
+     digitalWrite(pinled, LOW); //Desliga o LED
+    if (estadoSensor == true) { //Compara o valor de estado do LED
+      Serial.println("Sem movimento"); //Imprime a mensagem no monitor serial
+      estadoSensor = false; //Altera o valor de estadoSensor para HIGH
+    }
+  }
+
+    while (time <= 5000){
+    for(pos = 0; pos<= 90; pos +=1)
+    delay(15);
+{
+      meuservo.write(pos);
+      delay(15);}
+      while(time <= 5000){
+      tone(2,1000);
+      delay (500);
+      noTone (2);
+      delay (500);
+      time += 1000;}
+    
+      time = 0;
+for (pos = 90; pos>=0; pos -=1){
+      meuservo.write(pos);
+      delay(15);}
+}
+}
+
+
